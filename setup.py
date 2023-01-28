@@ -23,7 +23,7 @@ from setuptools import setup
 from setuptools.dist import Distribution
 
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 REQUIRED_PACKAGES = [
     'tensorflow >= 2.1.0',
 ]
@@ -46,12 +46,13 @@ class BinaryDistribution(Distribution):
   def is_pure(self):
     return False
 
+
 setup(
     name=project_name,
     version=__version__,
     description=('tensorflow-custom-ops is an examples for custom ops for TensorFlow'),
     author='Google Inc.',
-    author_email='opensource@google.com',
+    author_email='asim.98.12.26@gmail.com',
     # Contained modules and scripts.
     packages=find_packages(),
     install_requires=REQUIRED_PACKAGES,
@@ -71,6 +72,8 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Software Development :: Libraries',
