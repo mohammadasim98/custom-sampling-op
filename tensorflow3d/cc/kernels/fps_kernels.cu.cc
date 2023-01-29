@@ -103,10 +103,9 @@ struct FarthestPointSampleFunctor<GPUDevice, T> {
     //
     // See core/util/cuda_kernel_helper.h for example of computing
     // block count and thread_per_block count.
-    int block_count = 512;
-    int thread_per_block = 32;
-    FarthestPointSampleKernel<T>
-        <<<block_count, thread_per_block, 0, d.stream()>>>(b, n, m, inp, temp, out);
+    int block_count = 32;
+    int thread_per_block = 512;
+    FarthestPointSampleKernel<T><<<block_count, thread_per_block, 0, d.stream()>>>(b, n, m, inp, temp, out);
   }
 };
 
