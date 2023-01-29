@@ -23,7 +23,7 @@ from tensorflow.python.framework import ops
 from tensorflow.python.platform import test
 from tensorflow.python.framework import test_util
 try:
-  from farthest_point_sampling.python.ops import fps_ops
+  from tensorflow3d.python.ops import fps_ops
 except ImportError:
   import fps_ops
 

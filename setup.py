@@ -26,8 +26,9 @@ from setuptools.dist import Distribution
 __version__ = '0.0.2'
 REQUIRED_PACKAGES = [
     'tensorflow >= 2.1.0',
+    'polyscope'
 ]
-project_name = 'tensorflow-custom-ops'
+project_name = 'tensorflow3d'
 
 
 from setuptools.command.install import install
@@ -50,7 +51,7 @@ class BinaryDistribution(Distribution):
 setup(
     name=project_name,
     version=__version__,
-    description=('tensorflow-custom-ops is an examples for custom ops for TensorFlow'),
+    description=('An extension to tensorflow framework for 3D applications'),
     author='Google Inc.',
     author_email='asim.98.12.26@gmail.com',
     # Contained modules and scripts.

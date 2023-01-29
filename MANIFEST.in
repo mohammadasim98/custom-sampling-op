@@ -1,2 +1,2 @@
 recursive-include tensorflow_zero_out *.so
-recursive-include farthest_point_sampling *.so
+recursive-include tensorflow3d *.so

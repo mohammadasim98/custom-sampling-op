@@ -5,7 +5,6 @@ sh_binary(
         "LICENSE",
         "MANIFEST.in",
         "setup.py",
-        "//tensorflow_zero_out:zero_out_py",
-        "//farthest_point_sampling:fps_py",
+        "//tensorflow3d:tensorflow3d",
     ],
 )
