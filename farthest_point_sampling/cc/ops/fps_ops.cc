@@ -6,6 +6,7 @@ using namespace tensorflow;
 
 REGISTER_OP("FarthestPointSample")
   .Attr("npoint: int")
+  .Attr("T: {float, int32}")
   .Input("inp: float32")
   .Output("out: int32")
   .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {

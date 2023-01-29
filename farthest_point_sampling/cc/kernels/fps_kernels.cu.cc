@@ -27,7 +27,7 @@ typedef Eigen::GpuDevice GPUDevice;
 
 // Define the CUDA kernel.
 template <typename T>
-__global__ void FarthestPointSampleKernel(int b,int n,int m,const T * __restrict__ dataset, T * __restrict__ temp,int * __restrict__ idxs){
+__global__ void FarthestPointSampleKernel(int b,int n,int m,const T * __restrict__ dataset, T * __restrict__ temp, int * __restrict__ idxs){
   if (m<=0)
     return;
   const int BlockSize=512;
@@ -112,7 +112,7 @@ struct FarthestPointSampleFunctor<GPUDevice, T> {
 
 // Explicitly instantiate functors for the types of OpKernels registered.
 template struct FarthestPointSampleFunctor<GPUDevice, float>;
-// template struct FarthestPointSampleFunctor<GPUDevice, int32>;
+template struct FarthestPointSampleFunctor<GPUDevice, int32>;
 }  // end namespace functor
 }  // end namespace tensorflow
 
