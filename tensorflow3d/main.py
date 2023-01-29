@@ -14,13 +14,14 @@ import tensorflow3d as t3d
 
 
 if __name__ == '__main__':
-
+    flownet3d = t3d.models.FlowNet3D(name='flownet3d').build(input_shape1=(2048, 3), input_shape2=(2048, 3))
+    flownet3d.summary()
     # inputs = tf.keras.Input(shape=(2048, 3))
     # fps = t3d.layers.FPS(name='FPS', samples=1024)(inputs)
-    pnet = t3d.models.PointNet2(name='pointnet').build(input_shape=(None, 3))
+    # pnet = t3d.models.PointNet2(name='pointnet').build(input_shape=(None, 3))
     # model = tf.keras.models.Model(inputs=inputs, outputs=fps)
     # model.summary()
-    pnet.summary()
+    # pnet.summary()
     # dataset = t3d.datasets.Kitti(path='tensorflow3d/assets/datasets/kitti', samples=100000)
     # dataset.render('hello')
     # dataset = dataset.build()
