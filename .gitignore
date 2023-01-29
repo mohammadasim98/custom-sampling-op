@@ -1,5 +1,8 @@
 artifacts/
-bazel-*/
+bazel-bin
+bazel-custom-op
+bazel-out
+bazel-testlogs
 __pycache__/
 *.pyc
 install_gpu_driver.py
