@@ -35,6 +35,7 @@ class FarthestPointSampleTest(test.TestCase):
     with self.test_session():
       pt_sample=np.random.rand(1, 2048, 3).astype('float32')
       with ops.device("/gpu:0"):
+        print(fps_ops.farthest_point_sample(1024, pt_sample))
         self.assertAllClose(
             fps_ops.farthest_point_sample(1024, pt_sample)
         )
