@@ -8,7 +8,7 @@ namespace functor {
 
 template <typename Device, typename T>
 struct FarthestPointSampleFunctor {
-  void operator()(const Device& d, int b, int n, int m, const float * inp, float * temp, int * out);
+  void operator()(const Device& d, int b, int n, int m, const T * inp, T * temp, int * out);
 };
 
 }  // namespace functor

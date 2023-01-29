@@ -52,7 +52,7 @@ class FarthestPointSampleGpuOp: public OpKernel{
       // Grab the input tensor
       const Tensor& inp_tensor=context->input(0);
       int b = inp_tensor.shape().dim_size(0);
-      auto inp_flat = inp_tensor.flat<float>();
+      auto inp_flat = inp_tensor.flat<T>();
       const float * inp = &(inp_flat(0));
 
       // Create an output tensor
@@ -65,8 +65,8 @@ class FarthestPointSampleGpuOp: public OpKernel{
 
       // Create a temporary tensor
       Tensor temp_tensor;
-      OP_REQUIRES_OK(context, context->allocate_temp(DataTypeToEnum<float>::value, TensorShape{32, n}, &temp_tensor));
-      auto temp_flat = temp_tensor.flat<float>();
+      OP_REQUIRES_OK(context, context->allocate_temp(DataTypeToEnum<T>::value, TensorShape{32, n}, &temp_tensor));
+      auto temp_flat = temp_tensor.flat<T>();
       float * temp = &(temp_flat(0));
 
       // Compute
@@ -95,7 +95,6 @@ class FarthestPointSampleGpuOp: public OpKernel{
       Name("FarthestPointSample").Device(DEVICE_GPU).TypeConstraint<T>("T"), \
       FarthestPointSampleGpuOp<GPUDevice, T>);
 REGISTER_GPU(float);
-REGISTER_GPU(int32);
 #endif  // GOOGLE_CUDA
 }
 }  // namespace tensorflow
