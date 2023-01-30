@@ -92,9 +92,11 @@ First let's go through a quick overview of the folder structure and naming conve
 │   │   ├── kernels  # op kernel implementation
 │   │   │   |── XXX.h
 │   │   │   |── XXX_kernels.cc
-│   │   │   └── XXX_kernels.cu.cc  # GPU kernel
+│   │   │   |── XXX_kernels.cu.cc  # GPU kernel
+|   |   |   :   ...
 │   │   └── ops  # op interface definition
-│   │       └── XXX_ops.cc
+│   │       |── XXX_ops.cc
+|   |       :   ...
 │   ├── python
 │   │   ├── ops
 │   │   │   ├── __init__.py
