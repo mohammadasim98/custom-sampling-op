@@ -7,3 +7,4 @@ __pycache__/
 *.pyc
 install_gpu_driver.py
 .vscode
+.ipynb_checkpoints/
