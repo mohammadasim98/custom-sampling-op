@@ -20,7 +20,7 @@ if __name__ == '__main__':
     flownet3d.summary()
 
     pred = flownet3d((pt_sample, pt_sample))
-    print(pred)
+    print(np.shape(pred))
     # inputs = tf.keras.Input(shape=(2048, 3))
     # fps = t3d.layers.FPS(name='FPS', samples=1024)(inputs)
     # pnet = t3d.models.PointNet2(name='pointnet').build(input_shape=(None, 3))
