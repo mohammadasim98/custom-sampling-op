@@ -101,7 +101,8 @@ First let's go through a quick overview of the folder structure and naming conve
 │   │   ├── ops
 │   │   │   ├── __init__.py
 │   │   │   ├── XXX_ops.py   # Load and extend the low-level ops in python
-│   │   │   └── XXX_ops_test.py  # tests for ops
+│   │   │   |── XXX_ops_test.py  # tests for ops
+|   |   |   :   ...
 |   |   ├── layers
 |   |   ├── representations
 |   |   ├── models
