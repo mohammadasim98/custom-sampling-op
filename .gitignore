@@ -6,3 +6,4 @@ bazel-testlogs
 __pycache__/
 *.pyc
 install_gpu_driver.py
+.vscode
