@@ -103,7 +103,7 @@ First let's go through a quick overview of the folder structure and naming conve
 |   |   ├── layers
 |   |   ├── representations
 |   |   ├── models
-|   |   ├── ...
+|   |   :   ...
 │   │   └── __init__.py
 |   ├── main.py # For rapid prototyping and testing
     ├── flownet3d.ipynb # Example implementation of FlowNet3D model
