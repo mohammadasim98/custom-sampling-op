@@ -11,6 +11,11 @@ struct GroupPointFunctor {
   void operator()(const Device& d, int b, int n, int c, int m, int nsample, const T *points, const int *idx, T *out);
 };
 
+template <typename Device, typename T>
+struct GroupPointGradFunctor {
+  void operator()(const Device& d, int b, int n, int c, int m, int nsample, const T *grad_out, const int *idx, T *grad_points);
+};
+
 }  // namespace functor
 
 }  // namespace tensorflow

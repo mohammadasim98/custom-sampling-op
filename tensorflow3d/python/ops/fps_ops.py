@@ -11,7 +11,7 @@ from tensorflow.python.framework import load_library, ops
 from tensorflow.python.platform import resource_loader
 print(resource_loader.get_path_to_datafile('_fps_ops.so'))
 
-fps_ops = load_library.load_op_library(resource_loader.get_path_to_datafile('_fps_ops.so'))
+ops_so = load_library.load_op_library(resource_loader.get_path_to_datafile('_fps_ops.so'))
 
 def farthest_point_sample(npoint, inp, T=float):
     """
@@ -21,7 +21,7 @@ input:
 returns:
     batch_size * npoint         int32
     """
-    return fps_ops.farthest_point_sample(inp, npoint, T)
+    return ops_so.farthest_point_sample(inp, npoint, T)
 
 ops.NoGradient('FarthestPointSample')
 

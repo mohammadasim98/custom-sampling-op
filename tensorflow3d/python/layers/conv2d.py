@@ -13,7 +13,7 @@ import tensorflow as tf
 
 class Conv2D(tf.keras.layers.Layer):
 
-    def __init__(self, filters, shape, name, kernel_initializer=tf.keras.initializers.RandomNormal(),
+    def __init__(self, filters, shape, bn, bn_decay, data_format, name, kernel_initializer=tf.keras.initializers.RandomNormal(),
                  strides=None, padding='VALID'):
         """
         @ops: Initialize parameters
@@ -42,7 +42,11 @@ class Conv2D(tf.keras.layers.Layer):
         self.padding = padding
         self.strides = strides
         self.filters = filters
+        self.bn = bn
+        self.bn_decay = bn_decay if bn_decay is not None else 0.9
+        self.data_format = data_format
         self.kernel_initializer = kernel_initializer
+        self.batch_norm = tf.keras.layers.BatchNormalization(center=True, scale=True, momentum=self.bn_decay)
 
     def build(self, input_shape):
         """
@@ -52,9 +56,19 @@ class Conv2D(tf.keras.layers.Layer):
                 type: Tuple / List
         @return: None
         """
-        kernel_shape = [self.shape[0], self.shape[1], input_shape[-1], self.filters]
+        if self.data_format == 'NHWC':
+            num_in_channels = input_shape[-1]
+        elif self.data_format=='NCHW':
+            num_in_channels = input_shape[1]
+
+        kernel_shape = [self.shape[0], self.shape[1], num_in_channels, self.filters]
+
         self.kernel = tf.Variable(
             initial_value=self.kernel_initializer(shape=kernel_shape, dtype=tf.float32),
+            trainable=True)
+
+        self.biases = tf.Variable(
+            initial_value=tf.keras.initializers.Constant(0.0)(shape=[self.filters], dtype=tf.float32),
             trainable=True)
 
     def call(self, inputs):
@@ -68,5 +82,14 @@ class Conv2D(tf.keras.layers.Layer):
             type: KerasTensor
             shape: BxN_xL_xC_
         """
-        return tf.nn.conv2d(inputs, filters=self.kernel, name=self.id,
+        net = tf.nn.conv2d(inputs, filters=self.kernel, name=self.id,
                             strides=self.strides, padding=self.padding)
+        net = tf.nn.bias_add(net, self.biases, data_format=self.data_format)
+        if self.bn:
+            net = self.batch_norm(net)
+
+        net = tf.nn.relu(net)
+
+        return net
+
+

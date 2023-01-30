@@ -15,3 +15,4 @@ from .maxpool2d import MaxPool2D
 from .dense import Dense
 from .fps import FPS
 from .set_abstraction import SetAbstraction
+from .set_conv import SetConv

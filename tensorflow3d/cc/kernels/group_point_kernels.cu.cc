@@ -46,6 +46,26 @@ __global__ void GroupPointKernel(int b, int n, int c, int m, int nsample, const 
     }
 }
 
+// output: grad_points (b,n,c)
+template <typename T>
+__global__ void GroupPointGradKernel(int b, int n, int c, int m, int nsample, const T *grad_out, const int *idx, T *grad_points) {
+    int batch_index = blockIdx.x;
+    idx += m*nsample*batch_index;
+    grad_out += m*nsample*c*batch_index;
+    grad_points += n*c*batch_index;
+
+    int index = threadIdx.x;
+    int stride = blockDim.x;
+
+    for (int j=index;j<m;j+=stride) {
+        for (int k=0;k<nsample;++k) {
+            int ii = idx[j*nsample+k];
+            for (int l=0;l<c;++l) {
+                 atomicAdd(&grad_points[ii*c+l], grad_out[j*nsample*c+k*c+l]);
+            }
+        }
+    }
+}
 
 // Define the GPU implementation that launches the CUDA kernel.
 template <typename T>
@@ -56,13 +76,27 @@ struct GroupPointFunctor<GPUDevice, T> {
     // See core/util/cuda_kernel_helper.h for example of computing
     // block count and thread_per_block count.
     int thread_per_block = 256;
-    GroupPointKernel<T><<<b, thread_per_block, 0, d.stream()>>>(b,n,c,m,nsample,points,idx,out);
+    GroupPointGradKernel<T><<<b, thread_per_block, 0, d.stream()>>>(b,n,c,m,nsample,points,idx,out);
   }
 };
 
+template <typename T>
+struct GroupPointGradFunctor<GPUDevice, T> {
+  void operator()(const GPUDevice& d, int b, int n, int c, int m, int nsample, const T *grad_out, const int *idx, T *grad_points) {
+    // Launch the cuda kernel.
+    //
+    // See core/util/cuda_kernel_helper.h for example of computing
+    // block count and thread_per_block count.
+    int thread_per_block = 256;
+    GroupPointKernel<T><<<b, thread_per_block, 0, d.stream()>>>(b,n,c,m,nsample,grad_out,idx,grad_points);
+  }
+};
 // Explicitly instantiate functors for the types of OpKernels registered.
 template struct GroupPointFunctor<GPUDevice, float>;
 template struct GroupPointFunctor<GPUDevice, int32>;
+
+template struct GroupPointGradFunctor<GPUDevice, float>;
+template struct GroupPointGradFunctor<GPUDevice, int32>;
 }  // end namespace functor
 }  // end namespace tensorflow
 

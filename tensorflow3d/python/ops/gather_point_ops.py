@@ -10,9 +10,9 @@ from __future__ import print_function
 from tensorflow.python.framework import load_library, ops
 from tensorflow.python.platform import resource_loader
 
-ops = load_library.load_op_library(resource_loader.get_path_to_datafile('_gather_point_ops.so'))
+ops_so = load_library.load_op_library(resource_loader.get_path_to_datafile('_gather_point_ops.so'))
 
 def gather_point(inp,idx):
 
-    return ops.gather_point(inp,idx, float)
+    return ops_so.gather_point(inp,idx, float)
 

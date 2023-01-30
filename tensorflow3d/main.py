@@ -11,11 +11,16 @@
 
 import tensorflow as tf
 import tensorflow3d as t3d
-
+import numpy as np
 
 if __name__ == '__main__':
+
+    pt_sample=np.random.rand(1, 2048, 3).astype('float32')
     flownet3d = t3d.models.FlowNet3D(name='flownet3d').build(input_shape1=(2048, 3), input_shape2=(2048, 3))
     flownet3d.summary()
+
+    pred = flownet3d((pt_sample, pt_sample))
+    print(pred)
     # inputs = tf.keras.Input(shape=(2048, 3))
     # fps = t3d.layers.FPS(name='FPS', samples=1024)(inputs)
     # pnet = t3d.models.PointNet2(name='pointnet').build(input_shape=(None, 3))

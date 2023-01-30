@@ -19,3 +19,13 @@ REGISTER_OP("GroupPoint")
         c->set_output(0, output);
         return Status::OK();
     });
+REGISTER_OP("GroupPointGrad")
+    .Attr("T: {float, int32}")
+    .Input("points: float32")
+    .Input("idx: int32")
+    .Input("grad_out: float32")
+    .Output("grad_points: float32")
+    .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
+        c->set_output(0, c->input(0));
+        return Status::OK();
+    });

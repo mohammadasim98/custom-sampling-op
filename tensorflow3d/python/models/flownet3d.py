@@ -10,14 +10,14 @@
 """
 import tensorflow as tf
 
-from tensorflow3d.python.layers import FPS, TNet, Conv2D, Dense, MaxPool2D, SetAbstraction
+from tensorflow3d.python.layers import FPS, TNet, Conv2D, Dense, MaxPool2D, SetConv
 
 class FlowNet3D(tf.keras.Model):
     """
     PointNet Model
     """
 
-    def __init__(self, name):
+    def __init__(self, name, bn_decay=None):
         """
         @ops: Initialize PointNet
         @args:
@@ -28,6 +28,7 @@ class FlowNet3D(tf.keras.Model):
         super(FlowNet3D, self).__init__()
         self.num_points = None
         self.id = name
+        self.bn_decay = bn_decay
         self.RADIUS1 = 0.5
         self.RADIUS2 = 1.0
         self.RADIUS3 = 2.0
@@ -58,9 +59,9 @@ class FlowNet3D(tf.keras.Model):
             type: KerasTensor
         """
         # BxNx3: Farthest Point Sampling
-        l1_xyz_f1, l1_points_f1, l1_indices_f1 = SetAbstraction(name='setconv1_f1', mlp=[32,32,64], mlp2=None, samples=1024, radius=self.RADIUS1, k=16)(l0_xyz_f1, l0_points_f1)
-        l2_xyz_f1, l2_points_f1, l2_indices_f1 = SetAbstraction(name='setconv2_f1', mlp=[64,64,128], mlp2=None, samples=1024, radius=self.RADIUS2, k=16)(l1_xyz_f1, l1_points_f1)
+        l1_xyz_f1, l1_points_f1, l1_indices_f1 = SetConv(name='setconv1_f1', mlp=[32,32,64], mlp2=None, samples=1024, radius=self.RADIUS1, k=16, group_all=False, bn_decay=self.bn_decay)(l0_xyz_f1, l0_points_f1)
+        l2_xyz_f1, l2_points_f1, l2_indices_f1 = SetConv(name='setconv2_f1', mlp=[64,64,128], mlp2=None, samples=256, radius=self.RADIUS2, k=16, group_all=False, bn_decay=self.bn_decay)(l1_xyz_f1, l1_points_f1)
     
-        l1_xyz_f2, l1_points_f2, l1_indices_f2 = SetAbstraction(name='setconv1_f2', mlp=[32,32,64], mlp2=None, samples=1024, radius=self.RADIUS1, k=16)(l0_xyz_f2, l0_points_f2)
-        l2_xyz_f2, l2_points_f2, l2_indices_f2 = SetAbstraction(name='setconv2_f2', mlp=[64,64,128], mlp2=None, samples=1024, radius=self.RADIUS2, k=16)(l1_xyz_f2, l1_points_f2)
+        l1_xyz_f2, l1_points_f2, l1_indices_f2 = SetConv(name='setconv1_f2', mlp=[32,32,64], mlp2=None, samples=1024, radius=self.RADIUS1, k=16, group_all=False, bn_decay=self.bn_decay)(l0_xyz_f2, l0_points_f2)
+        l2_xyz_f2, l2_points_f2, l2_indices_f2 = SetConv(name='setconv2_f2', mlp=[64,64,128], mlp2=None, samples=256, radius=self.RADIUS2, k=16, group_all=False, bn_decay=self.bn_decay)(l1_xyz_f2, l1_points_f2)
         return l2_xyz_f1, l2_points_f1, l2_xyz_f2, l2_points_f2
