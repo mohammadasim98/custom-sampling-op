@@ -32,9 +32,6 @@ And the following instead if it is manylinux2010 compatible:
   docker pull tensorflow/tensorflow:custom-op-ubuntu16
   docker run -it tensorflow/tensorflow:custom-op-ubuntu16 /bin/bash
 ```
-
-
-#### Docker
 Next, set up a Docker container using the provided Docker image for building and testing the ops. We provide two sets of Docker images for different versions of pip packages. If the pip package you are building against was released before Aug 1, 2019 and has manylinux1 tag, please use Docker images `tensorflow/tensorflow:custom-op-ubuntu14` and `tensorflow/tensorflow:custom-op-gpu-ubuntu14`, which are based on Ubuntu 14.04. Otherwise, for the newer manylinux2010 packages, please use Docker images `tensorflow/tensorflow:custom-op-ubuntu16` and `tensorflow/tensorflow:custom-op-gpu-ubuntu16` instead. All Docker images come with Bazel pre-installed, as well as the corresponding toolchain used for building the released TensorFlow pacakges. We have seen many cases where dependency version differences and ABI incompatibilities cause the custom op extension users build to not work properly with TensorFlow's released pip packages. Therefore, it is *highly recommended* to use the provided Docker image to build your custom op. To get the CPU Docker image, run one of the following command based on which pip package you are building against:
 ```bash
 # For manylinux2010
@@ -46,23 +43,20 @@ For GPU, run
 # For manylinux2010
 docker pull tensorflow/tensorflow:custom-op-gpu-ubuntu16
 ```
-
-You might want to use Docker volumes to map a `work_dir` from host to the container, so that you can edit files on the host, and build with the latest changes in the Docker container. To do so, run the following for CPU
+Then run a container either directly 
 ```bash
-# For pip packages labeled manylinux1
-docker run -it -v ${PWD}:/working_dir -w /working_dir  tensorflow/tensorflow:custom-op-ubuntu14
-
+  docker run -it <your-container> /bin/bash
+```
+Or you might want to use Docker volumes to map a `work_dir` from host to the container, so that you can edit files on the host, and build with the latest changes in the Docker container. To do so, run the following for CPU
+```bash
 # For manylinux2010
-docker run -it -v ${PWD}:/working_dir -w /working_dir  tensorflow/tensorflow:custom-op-ubuntu16
+docker run -it -v ${PWD}:/working_dir -w /working_dir  <your-container>
 ```
 
 For GPU, you want to use `nvidia-docker`:
 ```bash
-# For pip packages labeled manylinux1
-docker run --runtime=nvidia --privileged  -it -v ${PWD}:/working_dir -w /working_dir  tensorflow/tensorflow:custom-op-gpu-ubuntu14
-
 # For manylinux2010
-docker run --runtime=nvidia --privileged  -it -v ${PWD}:/working_dir -w /working_dir  tensorflow/tensorflow:custom-op-gpu-ubuntu16
+docker run --runtime=nvidia --privileged  -it -v ${PWD}:/working_dir -w /working_dir  <your-container>
 
 ```
 Inside the Docker container, clone this repository. The code in this repository came from the [Adding an op](https://www.tensorflow.org/extend/adding_an_op) guide.
