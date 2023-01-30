@@ -59,7 +59,7 @@ For GPU, you want to use `nvidia-docker`:
 docker run --runtime=nvidia --privileged  -it -v ${PWD}:/working_dir -w /working_dir  <your-container>
 
 ```
-Inside the Docker container, clone this repository. The code in this repository came from the [Adding an op](https://www.tensorflow.org/extend/adding_an_op) guide.
+Inside the Docker container, clone this repository.
 ```bash
 git clone https://github.com/mohammadasim98/tensorflow3d.git
 cd tensorflow3d
