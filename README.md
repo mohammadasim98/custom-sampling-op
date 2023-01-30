@@ -12,11 +12,7 @@ manylinux2010 compatible. To help you building custom ops on linux, here we prov
 
 |          |          CPU custom op          |          GPU custom op         |
 |----------|:-------------------------------:|:------------------------------:|
-| TF nightly  |    nightly-custom-op-ubuntu16   | nightly-custom-op-gpu-ubuntu16 |
 | TF >= 2.3   |   2.3.0-custom-op-ubuntu16  |    2.3.0-custom-op-gpu-ubuntu16    |
-| TF 1.5, 2.0 | custom-op-ubuntu16-cuda10.0 |       custom-op-gpu-ubuntu16       |
-| TF <= 1.4   |        custom-op-ubuntu14       |     custom-op-gpu-ubuntu14     |
-
 
 Note: all above Docker images have prefix `tensorflow/tensorflow:`
 
@@ -30,11 +26,6 @@ You can skip this section if you are not building on Windows. If you are buildin
 You are going to build the op inside a Docker container. Pull the provided Docker image from TensorFlow's Docker hub and start a container.
 
 Use the following command if the TensorFlow pip package you are building
-against is not yet manylinux2010 compatible:
-```bash
-  docker pull tensorflow/tensorflow:custom-op-ubuntu14
-  docker run -it tensorflow/tensorflow:custom-op-ubuntu14 /bin/bash
-```
 And the following instead if it is manylinux2010 compatible:
 
 ```bash
@@ -42,26 +33,16 @@ And the following instead if it is manylinux2010 compatible:
   docker run -it tensorflow/tensorflow:custom-op-ubuntu16 /bin/bash
 ```
 
-Inside the Docker container, clone this repository. The code in this repository came from the [Adding an op](https://www.tensorflow.org/extend/adding_an_op) guide.
-```bash
-git clone https://github.com/mohammadasim98/tensorflow3d.git
-cd tensorflow3d
-```
+
 #### Docker
 Next, set up a Docker container using the provided Docker image for building and testing the ops. We provide two sets of Docker images for different versions of pip packages. If the pip package you are building against was released before Aug 1, 2019 and has manylinux1 tag, please use Docker images `tensorflow/tensorflow:custom-op-ubuntu14` and `tensorflow/tensorflow:custom-op-gpu-ubuntu14`, which are based on Ubuntu 14.04. Otherwise, for the newer manylinux2010 packages, please use Docker images `tensorflow/tensorflow:custom-op-ubuntu16` and `tensorflow/tensorflow:custom-op-gpu-ubuntu16` instead. All Docker images come with Bazel pre-installed, as well as the corresponding toolchain used for building the released TensorFlow pacakges. We have seen many cases where dependency version differences and ABI incompatibilities cause the custom op extension users build to not work properly with TensorFlow's released pip packages. Therefore, it is *highly recommended* to use the provided Docker image to build your custom op. To get the CPU Docker image, run one of the following command based on which pip package you are building against:
 ```bash
-# For pip packages labeled manylinux1
-docker pull tensorflow/tensorflow:custom-op-ubuntu14
-
 # For manylinux2010
 docker pull tensorflow/tensorflow:custom-op-ubuntu16
 ```
 
 For GPU, run 
 ```bash
-# For pip packages labeled manylinux1
-docker pull tensorflow/tensorflow:custom-op-gpu-ubuntu14
-
 # For manylinux2010
 docker pull tensorflow/tensorflow:custom-op-gpu-ubuntu16
 ```
@@ -84,7 +65,11 @@ docker run --runtime=nvidia --privileged  -it -v ${PWD}:/working_dir -w /working
 docker run --runtime=nvidia --privileged  -it -v ${PWD}:/working_dir -w /working_dir  tensorflow/tensorflow:custom-op-gpu-ubuntu16
 
 ```
-
+Inside the Docker container, clone this repository. The code in this repository came from the [Adding an op](https://www.tensorflow.org/extend/adding_an_op) guide.
+```bash
+git clone https://github.com/mohammadasim98/tensorflow3d.git
+cd tensorflow3d
+```
 #### Configure
 Last step before starting implementing the ops, you want to set up the build environment. The custom ops will need to depend on TensorFlow headers and shared library libtensorflow_framework.so, which are distributed with TensorFlow official pip package. If you would like to use Bazel to build your ops, you might also want to set a few action_envs so that Bazel can find the installed TensorFlow. We provide a `configure` script that does these for you. Simply run `./configure.sh` in the docker container and you are good to go.
 ```bash
