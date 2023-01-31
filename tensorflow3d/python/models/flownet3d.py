@@ -53,6 +53,7 @@ class FlowNet3D(tf.keras.Model):
 
         self.conv1 = Conv1D(filters=128, shape=1, name="conv1d1", padding='VALID', bn=True, bn_decay=self.bn_decay)
         self.conv2 = Conv1D(filters=3, shape=1, name="conv1d2", padding='VALID', activation=None)
+        
     def build(self, input_shape1, input_shape2):
         """
         @ops: Build the PointNet as a complete model
