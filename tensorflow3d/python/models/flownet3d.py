@@ -43,7 +43,7 @@ class FlowNet3D(tf.keras.Model):
         self.flowembedding = FlowEmbedding(name="flowembedding1", radius=10.0, k=64, mlp=[128,128,128], bn_decay=self.bn_decay, bn=True, pooling='max', knn=True, corr_func='concat')
 
         self.setconv3 = SetConv(name='setconv3', mlp=[128,128,256], mlp2=None, samples=64, radius=self.RADIUS3, k=8, group_all=False, bn_decay=self.bn_decay)
-        self.setconv4 = SetConv(name='setconv4', mlp=[64,64,128], mlp2=None, samples=16, radius=self.RADIUS4, k=8, group_all=False, bn_decay=self.bn_decay)
+        self.setconv4 = SetConv(name='setconv4', mlp=[256,256,512], mlp2=None, samples=16, radius=self.RADIUS4, k=8, group_all=False, bn_decay=self.bn_decay)
     
         self.setupconv1 = SetUpConv(name='setupconv1', mlp=None, mlp2=[256, 256], radius=2.4, k=8, knn=True, bn_decay=self.bn_decay)
         self.setupconv2 = SetUpConv(name='setupconv2', mlp=[128, 128, 256], mlp2=[256], radius=1.2, k=8, knn=True, bn_decay=self.bn_decay)
