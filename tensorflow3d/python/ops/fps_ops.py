@@ -9,7 +9,6 @@ from __future__ import print_function
 
 from tensorflow.python.framework import load_library, ops
 from tensorflow.python.platform import resource_loader
-print(resource_loader.get_path_to_datafile('_fps_ops.so'))
 
 ops_so = load_library.load_op_library(resource_loader.get_path_to_datafile('_fps_ops.so'))
 
