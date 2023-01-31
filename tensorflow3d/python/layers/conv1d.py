@@ -11,10 +11,10 @@
 import tensorflow as tf
 
 
-class Conv2D(tf.keras.layers.Layer):
+class Conv1D(tf.keras.layers.Layer):
 
     def __init__(self, filters, shape, name, activation=tf.nn.relu, bn=False, bn_decay=None, kernel_initializer=tf.keras.initializers.RandomNormal(),
-                 strides=[1, 1], padding='SAME', data_format='NHWC'):
+                 strides=1, padding='SAME', data_format='NHWC'):
         """
         @ops: Initialize parameters
         @args:
@@ -32,7 +32,7 @@ class Conv2D(tf.keras.layers.Layer):
                 type: Str / List
         @return: None
         """
-        super(Conv2D, self).__init__()
+        super(Conv1D, self).__init__()
         self.bias = None
         self.kernel = None
         self.id = name
@@ -45,7 +45,7 @@ class Conv2D(tf.keras.layers.Layer):
         self.data_format = data_format
         self.kernel_initializer = kernel_initializer
         self.activation = activation
-
+        
         self.batch_norm = tf.keras.layers.BatchNormalization(center=True, scale=True, momentum=self.bn_decay)
 
     def build(self, input_shape):
@@ -61,7 +61,7 @@ class Conv2D(tf.keras.layers.Layer):
         elif self.data_format=='NCHW':
             num_in_channels = input_shape[1]
 
-        kernel_shape = [self.shape[0], self.shape[1], num_in_channels, self.filters]
+        kernel_shape = [self.shape, num_in_channels, self.filters]
 
         self.kernel = tf.Variable(
             initial_value=self.kernel_initializer(shape=kernel_shape, dtype=tf.float32),
@@ -82,8 +82,8 @@ class Conv2D(tf.keras.layers.Layer):
             type: KerasTensor
             shape: BxN_xL_xC_
         """
-        net = tf.nn.conv2d(inputs, filters=self.kernel, name=self.id,
-                            strides=self.strides, padding=self.padding)
+        net = tf.nn.conv1d(inputs, filters=self.kernel, name=self.id,
+                            stride=self.strides, padding=self.padding)
         net = tf.nn.bias_add(net, self.biases, data_format=self.data_format)
         if self.bn:
             net = self.batch_norm(net)

@@ -9,10 +9,7 @@
 
 """
 import tensorflow as tf
-from tensorflow3d.python.ops.fps_ops import farthest_point_sample
-from tensorflow3d.python.ops.gather_point_ops import gather_point
-from tensorflow3d.python.ops.group_point_ops import group_point
-from tensorflow3d.python.ops.ball_query_ops import query_ball_point
+from tensorflow3d.python.ops import farthest_point_sample, gather_point, group_point, query_ball_point
 from tensorflow3d.python.layers.conv2d import Conv2D 
 
 class SetAbstraction(tf.keras.layers.Layer):

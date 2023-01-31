@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     pt_sample=np.random.rand(1, 2048, 3).astype('float32')
     flownet3d = t3d.models.FlowNet3D(name='flownet3d').build(input_shape1=(2048, 3), input_shape2=(2048, 3))
-    flownet3d.summary()
+    flownet3d.summary(line_length=250)
 
     pred = flownet3d((pt_sample, pt_sample))
     print(np.shape(pred))

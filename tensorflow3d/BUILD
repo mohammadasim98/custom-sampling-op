@@ -211,6 +211,50 @@ cc_binary(
         "//conditions:default": ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"],
     }) + if_cuda_is_configured(["-DTENSORFLOW_USE_NVCC=1", "-DGOOGLE_CUDA=1", "-x cuda", "-nvcc_options=relaxed-constexpr", "-nvcc_options=ftz=true"]),
 )
+
+cc_binary(
+    name = 'python/ops/_three_nn_ops.so',
+    srcs = [
+        "cc/kernels/three_nn_kernels.cc",
+        "cc/ops/three_nn_ops.cc",
+    ],
+    linkshared = 1,
+    deps = [
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
+    ],
+    features = select({
+        ":windows": ["windows_export_all_symbols"],
+        "//conditions:default": [],
+    }),
+    copts = select({
+        ":windows": ["/DEIGEN_STRONG_INLINE=inline", "-DTENSORFLOW_MONOLITHIC_BUILD", "/DPLATFORM_WINDOWS", "/DEIGEN_HAS_C99_MATH", "/DTENSORFLOW_USE_EIGEN_THREADPOOL", "/DEIGEN_AVOID_STL_ARRAY", "/Iexternal/gemmlowp", "/wd4018", "/wd4577", "/DNOGDI", "/UTF_COMPILE_LIBRARY"],
+        "//conditions:default": ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"],
+    }),
+)
+
+cc_binary(
+    name = 'python/ops/_three_interpolate_ops.so',
+    srcs = [
+        "cc/kernels/three_interpolate_kernels.cc",
+        "cc/ops/three_interpolate_ops.cc",
+    ],
+    linkshared = 1,
+    deps = [
+        "@local_config_tf//:libtensorflow_framework",
+        "@local_config_tf//:tf_header_lib",
+    ],
+    features = select({
+        ":windows": ["windows_export_all_symbols"],
+        "//conditions:default": [],
+    }),
+    copts = select({
+        ":windows": ["/DEIGEN_STRONG_INLINE=inline", "-DTENSORFLOW_MONOLITHIC_BUILD", "/DPLATFORM_WINDOWS", "/DEIGEN_HAS_C99_MATH", "/DTENSORFLOW_USE_EIGEN_THREADPOOL", "/DEIGEN_AVOID_STL_ARRAY", "/Iexternal/gemmlowp", "/wd4018", "/wd4577", "/DNOGDI", "/UTF_COMPILE_LIBRARY"],
+        "//conditions:default": ["-pthread", "-std=c++11", "-D_GLIBCXX_USE_CXX11_ABI=0"],
+    }),
+)
+
+
 py_library(
     name = "ops",
     srcs = ([
@@ -221,6 +265,8 @@ py_library(
         "python/ops/ball_query_ops.py",
         "python/ops/selection_sort_ops.py",
         "python/ops/knn_point_ops.py",
+        "python/ops/three_nn_ops.py",
+        "python/ops/three_interpolate_ops.py",
     ]),
     data = [
         ":python/ops/_fps_ops.so",
@@ -228,6 +274,8 @@ py_library(
         ":python/ops/_group_point_ops.so",
         ":python/ops/_ball_query_ops.so",
         ":python/ops/_selection_sort_ops.so",
+        ":python/ops/_three_nn_ops.so",
+        ":python/ops/_three_interpolate_ops.so",
     ],
     srcs_version = "PY2AND3",
 )
@@ -248,6 +296,7 @@ py_library(
     name = "layers",
     srcs = ([
         "python/layers/__init__.py",
+        "python/layers/conv1d.py",
         "python/layers/conv2d.py",
         "python/layers/fps.py",
         "python/layers/maxpool2d.py",
@@ -255,6 +304,9 @@ py_library(
         "python/layers/dense.py",
         "python/layers/set_abstraction.py",
         "python/layers/set_conv.py",
+        "python/layers/set_up_conv.py",
+        "python/layers/flow_embedding.py",
+        "python/layers/feature_propagation.py",
     ]),
     srcs_version = "PY2AND3",
 )
