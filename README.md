@@ -52,7 +52,7 @@ Then run a container either directly
 Or you might want to use Docker volumes to map a `work_dir` from host to the container, so that you can edit files on the host, and build with the latest changes in the Docker container. To do so, run the following for CPU
 ```bash
 # For manylinux2010
-docker run -it -v ${PWD}:/working_dir -w /working_dir  <your-container>
+docker run -it -v ${PWD}:/<working-directory> -w /<working-directory>  <your-container>
 ```
 
 For GPU, you want to use `nvidia-docker`:
@@ -73,10 +73,10 @@ Last step before starting implementing the ops, you want to set up the build env
 ```
 
 ### Build and install PIP Package
-You can build the pip package with either Bazel or make.
+You can build the pip package and install it with the following script.
 
 ```bash
-  ./build.sh
+  sh ./build.sh
 ```
 
 
@@ -135,7 +135,7 @@ First let's go through a quick overview of the folder structure and naming conve
 
 
 ### Add Op Implementation
-Now you are ready to implement your op. Following the instructions at [Adding a New Op](https://www.tensorflow.org/extend/adding_an_op), add definition of your op interface under `<your_op>/cc/ops/` and kernel implementation under `<your_op>/cc/kernels/`.
+Now you are ready to implement your op. Following the instructions at [Adding a New Op](https://www.tensorflow.org/extend/adding_an_op), add definition of your op interface under `tensorflow3d/cc/ops/` and kernel implementation under `<your_op>/cc/kernels/`.
 
 
 ### FAQ
