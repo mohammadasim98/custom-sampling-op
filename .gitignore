@@ -10,3 +10,4 @@ install_gpu_driver.py
 .ipynb_checkpoints/
 
 assets/
+kaggle.json
