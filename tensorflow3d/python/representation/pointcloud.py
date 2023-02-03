@@ -10,8 +10,8 @@
 """
 import polyscope as ps
 import numpy as np
-
-
+import glob
+import tensorflow as tf
 class PointCloud:
     def __init__(self, **kwargs):
         self.name = kwargs.get('name', None)
@@ -36,32 +36,31 @@ class PointCloud:
         with open(path) as file:
             try:
                 line = file.readline()
+                values, colors, normals, points = [], [], [], []
                 while line:
                     line = line.split(" ")
                     line = list(np.array(line).astype(np.float))
 
                     if mode == 'xyzi':
-                        self.values.append(line[-1])
+                        values.append(line[-1])
 
                     elif mode == 'xyzrgb':
-                        self.colors.append(line[3:])
+                        colors.append(line[3:])
 
                     elif mode == 'xyznxnynz':
-                        self.normals.append(line[3:])
+                        normals.append(line[3:])
 
-                    self.points.append(line[:3])
+                    points.append(line[:3])
                     line = file.readline()
 
-                self.points = np.array(self.points)
-                self.values = np.array(self.values)
-                self.colors = np.array(self.colors)
-                self.normals = np.array(self.normals)
+                self.points = np.array(points)
+                self.values = np.array(values)
+                self.colors = np.array(colors)
+                self.normals = np.array(normals)
                 self.shape = self.points.shape
                 return self
             except Exception:
                 raise Exception('Unable to read file')
-
-                return False
 
     def sample(self, num: int = 1024):
         randi = np.random.randint(0, high=len(self.points), size=num, dtype=int)
@@ -74,7 +73,7 @@ class PointCloud:
         if np.size(self.values):
             self.values = self.values[randi]
 
-    def render(self, paths: list = [], colors: bool = False, values: bool = False, name: str = 'default'):
+    def render(self, paths: list = [], colors: bool = False, values: bool = False, name: str = 'default', animate=False):
         """
         @ops: Render the point cloud including color, intensity value and surface normals
         @args:
@@ -85,18 +84,26 @@ class PointCloud:
 
         ps.init()
         ps.set_up_dir("z_up")
-
         if self.points is not None or self.points != []:
             ps_cloud = ps.register_point_cloud(name, self.points)
             ps_cloud.set_radius(0.00042)
-
-        if colors:
-            ps_cloud.add_color_quantity(name, self.colors)
-
-        if values:
-            ps_cloud.add_scalar_quantity(name, self.values, enabled=True, cmap='turbo')
-
-        ps.show()
+            if colors:
+                ps_cloud.add_color_quantity(name, self.colors)
+            if values:
+                ps_cloud.add_scalar_quantity(name, self.values, enabled=True, cmap='turbo')
+        else:
+            raise "NoPointCloudData"
+        if animate:
+            for path in paths:
+                print(path)
+                self.load(path, mode='xyzi')
+                self.sample()
+                ps_cloud.update_point_positions(self.points)
+        ps.show()    
         del ps_cloud
 
 
+if __name__ == "__main__":
+    pcd = PointCloud()
+    pcd.load('assets/datasets/data/0000000000.txt', mode='xyzi')
+    pcd.render(paths=tf.io.gfile.glob("/home/asimbluemoon/custom-op/assets/datasets/data/*.txt"), animate=True)

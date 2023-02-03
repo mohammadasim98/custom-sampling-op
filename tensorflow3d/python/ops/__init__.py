@@ -1,3 +1,13 @@
+"""
+    For non-commercial use.
+    (c) All rights reserved.
+
+    This package is licensed under MIT
+    license found in the root directory.
+
+    @author: Mohammad Asim
+
+"""
 
 from .fps_ops import farthest_point_sample
 from .gather_point_ops import gather_point

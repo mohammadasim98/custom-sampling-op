@@ -8,3 +8,5 @@ __pycache__/
 install_gpu_driver.py
 .vscode
 .ipynb_checkpoints/
+
+assets/
